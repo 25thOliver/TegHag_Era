@@ -20,8 +20,8 @@ def fetch_team_matches(team_id: int, season: int, competitions: list):
             matches = data.get("response", [])
 
             # Debug: show raw response size and params for this page
-            print(f\"Request params: {params}\")
-            print(f\"Competition {comp_id} page {page}: total={len(matches)} matches in API response\")
+            print(f"Request params: {params}")
+            print(f"Competition {comp_id} page {page}: total={len(matches)} matches in API response")
 
             if not matches:
                 break
