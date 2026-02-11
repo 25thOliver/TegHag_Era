@@ -9,9 +9,11 @@ API_KEY = os.getenv("API_FOOTBALL_KEY")
 BASE_URL = "https://v3.football.api-sports.io"
 
 # Manchester United team ID (API-Football)
+# Based on live API probing, season 2022 has fixtures
+# in Premier League with league ID 39.
 TEAM_ID = 33
-SEASON = 2022 # First full season under Ten Hag
-COMPETITIONS = [38, 12, 6, 6]
+SEASON = 2022  # First full season under Ten Hag
+COMPETITIONS = [39]  # Premier League
 
 # Output Path
 RAW_MATCHES_DIR = os.path.join("data", "raw", "matches")
