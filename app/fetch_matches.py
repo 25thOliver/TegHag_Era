@@ -18,15 +18,18 @@ def fetch_team_matches(team_id: int, season: int, competitions: list):
             }
             data = client.get("fixtures", params=params)
             matches = data.get("response", [])
+
+            # Debug: show raw response size for this page
+            print(f"Competition {comp_id} page {page}: total={len(matches)} matches in API response")
+
             if not matches:
                 break
 
             # Filter finished matches
             finished_matches = [m for m in matches if m['fixture']['status']['short'] == "FT"]
-            print(f"Competition {comp_id} page {page}: {len(finished_matches)} finished matches")
+            print(f"Competition {comp_id} page {page}: finished={len(finished_matches)} matches with status FT")
             all_matches.extend(finished_matches)
 
-            
             page += 1
 
     return all_matches
