@@ -21,8 +21,12 @@ def fetch_team_matches(team_id: int, season: int, competitions: list):
             if not matches:
                 break
 
-            all_matches.extend(matches)
-            print(f"Fetched {len(matches)} matches for compettition {comp_id} page {page}")
+            # Filter finished matches
+            finished_matches = [m for m in matches if m['fixture']['status']['short'] == "FT"]
+            print(f"Competition {comp_id} page {page}: {len(finished_matches)} finished matches")
+            all_matches.extend(finished_matches)
+
+            
             page += 1
 
     return all_matches
