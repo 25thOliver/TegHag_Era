@@ -19,8 +19,9 @@ def fetch_team_matches(team_id: int, season: int, competitions: list):
             data = client.get("fixtures", params=params)
             matches = data.get("response", [])
 
-            # Debug: show raw response size for this page
-            print(f"Competition {comp_id} page {page}: total={len(matches)} matches in API response")
+            # Debug: show raw response size and params for this page
+            print(f\"Request params: {params}\")
+            print(f\"Competition {comp_id} page {page}: total={len(matches)} matches in API response\")
 
             if not matches:
                 break
