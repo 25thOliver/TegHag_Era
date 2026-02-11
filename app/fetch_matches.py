@@ -7,31 +7,33 @@ def fetch_team_matches(team_id: int, season: int, competitions: list):
     client = APIClient()
     all_matches = []
 
-    for comp_id in competitions:
-        page = 1
-        while True:
-            params = {
-                "team": team_id,
-                "season": season,
-                "league": comp_id,
-                "page": page
-            }
-            data = client.get("fixtures", params=params)
-            matches = data.get("response", [])
+    # Fetch all fixtures for the team & season, then filter by competition IDs
+    page = 1
+    while True:
+        params = {
+            "team": team_id,
+            "season": season,
+            "page": page
+        }
+        data = client.get("fixtures", params=params)
+        matches = data.get("response", [])
 
-            # Debug: show raw response size and params for this page
-            print(f"Request params: {params}")
-            print(f"Competition {comp_id} page {page}: total={len(matches)} matches in API response")
+        # Debug: show raw response size and params for this page
+        print(f"Request params: {params}")
+        print(f"Page {page}: total={len(matches)} matches in API response")
 
-            if not matches:
-                break
+        if not matches:
+            break
 
-            # Filter finished matches
-            finished_matches = [m for m in matches if m['fixture']['status']['short'] == "FT"]
-            print(f"Competition {comp_id} page {page}: finished={len(finished_matches)} matches with status FT")
-            all_matches.extend(finished_matches)
+        # Filter to selected competitions (league IDs) and finished matches
+        filtered = [
+            m for m in matches
+            if m["league"]["id"] in competitions and m["fixture"]["status"]["short"] == "FT"
+        ]
+        print(f"Page {page}: kept={len(filtered)} finished matches in target competitions")
+        all_matches.extend(filtered)
 
-            page += 1
+        page += 1
 
     return all_matches
 
