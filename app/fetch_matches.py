@@ -7,33 +7,24 @@ def fetch_team_matches(team_id: int, season: int, competitions: list):
     client = APIClient()
     all_matches = []
 
-    # Fetch all fixtures for the team & season, then filter by competition IDs
-    page = 1
-    while True:
-        params = {
-            "team": team_id,
-            "season": season,
-            "page": page
-        }
-        data = client.get("fixtures", params=params)
-        matches = data.get("response", [])
+    # Fetch all fixtures for the team & season in a single call,
+    # then filter by competition IDs and finished status.
+    params = {
+        "team": team_id,
+        "season": season,
+    }
+    data = client.get("fixtures", params=params)
+    matches = data.get("response", [])
 
-        # Debug: show raw response size and params for this page
-        print(f"Request params: {params}")
-        print(f"Page {page}: total={len(matches)} matches in API response")
+    print(f"Request params (single call): {params}")
+    print(f"Total matches in API response: {len(matches)}")
 
-        if not matches:
-            break
-
-        # Filter to selected competitions (league IDs) and finished matches
-        filtered = [
-            m for m in matches
-            if m["league"]["id"] in competitions and m["fixture"]["status"]["short"] == "FT"
-        ]
-        print(f"Page {page}: kept={len(filtered)} finished matches in target competitions")
-        all_matches.extend(filtered)
-
-        page += 1
+    filtered = [
+        m for m in matches
+        if m["league"]["id"] in competitions and m["fixture"]["status"]["short"] == "FT"
+    ]
+    print(f"Kept {len(filtered)} finished matches in target competitions")
+    all_matches.extend(filtered)
 
     return all_matches
 
