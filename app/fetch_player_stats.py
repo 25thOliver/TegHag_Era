@@ -12,7 +12,7 @@ def load_fixtures_ids():
         if not filename.endswith(".json"):
             continue
 
-        path = os.path.join(RAW_MATCHES_DIR. filename)
+        path = os.path.join(RAW_MATCHES_DIR, filename)
         with open(path, "r", encoding="utf-8") as f:
             match = json.load(f)
 
