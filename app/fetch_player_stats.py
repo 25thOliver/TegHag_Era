@@ -30,4 +30,14 @@ def fetch_player_stats_for_fixture(client: APIClient, fixture_id: int):
     # API-Football returns player stats in the "response" field
     return data.get("response", [])
 
+def save_player_stats(fixture_id: int, stats):
+    # Save raw player stats JSON for a fixture
+    os.makedirs(RAW_PLAYER_STATS_DIR, exist_ok=True)
+    path = os.path.join(RAW_PLAYER_STATS_DIR, f"{fixture_id}.json")
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(stats, f, indent=2)
+
+    print(f"Saved player stats for fixture {fixture_id} -> {path}")
+
     
