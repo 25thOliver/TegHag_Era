@@ -4,7 +4,7 @@ import json
 from api_client import APIClient
 from config import RAW_MATCHES_DIR, RAW_PLAYER_STATS_DIR
 
-def load_fixtures_ids():
+def load_fixture_ids():
     # Read all match JSON files and collect unique fixture IDs
     fixture_ids = set()
 
@@ -42,7 +42,7 @@ def save_player_stats(fixture_id: int, stats):
 
 def main():
     client = APIClient()
-    fixture_ids = load_fixtures_ids()
+    fixture_ids = load_fixture_ids()
 
     print(f"Found {len(fixture_ids)} fixtures in {RAW_MATCHES_DIR}")
 
