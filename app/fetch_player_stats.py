@@ -21,3 +21,13 @@ def load_fixtures_ids():
 
     # Sort for consistent progress output
     return sorted(fixture_ids)
+
+def fetch_player_stats_for_fixture(client: APIClient, fixture_id: int):
+    # Call /fixtures/players for a single fixture
+    params = {"fixture": fixture_id}
+    data = client.get("fixtures/players", params=params)
+
+    # API-Football returns player stats in the "response" field
+    return data.get("response", [])
+
+    
