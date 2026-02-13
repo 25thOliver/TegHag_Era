@@ -18,5 +18,7 @@ COMPETITIONS = [39, 45, 48, 3]
 
 # Output Path
 RAW_MATCHES_DIR = os.path.join("data", "raw", "matches")
+RAW_PLAYER_STATS_DIR = os.path.join("data", "raw", "player_stats")
 
 os.makedirs(RAW_MATCHES_DIR, exist_ok=True)
+os.makedirs(RAW_PLAYER_STATS_DIR, exist_ok=True)
