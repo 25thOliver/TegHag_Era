@@ -40,4 +40,16 @@ def save_player_stats(fixture_id: int, stats):
 
     print(f"Saved player stats for fixture {fixture_id} -> {path}")
 
-    
+def main():
+    client = APIClient()
+    fixture_ids = load_fixtures_ids()
+
+    print(f"Found {len(fixture_ids)} fixtures in {RAW_MATCHES_DIR}")
+
+    for idx, fixture_id in enumerate(fixture_ids, start=1):
+        print(f"[{idx}/{len(fixture_ids)}] Fetching player stats for fixture {fixture_id}")
+        stats = fetch_player_stats_for_fixture(client, fixture_id)
+        save_player_stats(fixture_id, stats)
+
+if __name__ == "__main__":
+    main()
