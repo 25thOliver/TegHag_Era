@@ -33,7 +33,7 @@ def load_matches_and_teams():
     print(f"Found {len(match_files)} match files in {RAW_MATCHES_DIR}")
 
     for idx, path in enumerate(match_files, start=1):
-        with open(path, "r", encoding="utf0-8") as f:
+        with open(path, "r", encoding="utf-8") as f:
             m = json.load(f)
 
         fixture = m["fixture"]
@@ -58,11 +58,11 @@ def load_matches_and_teams():
             """
             INSERT INTO dim_competitions (competition_id, name, country, season)
             VALUES (%s, %s, %s, %s)
-            ON CONLICT (competition_id) DO UPDATE
-              SET name = EXCLUDED.name,
-                  country = EXCLUDED.country,
-                  season = EXCLUDED.season
-            """
+            ON CONFLICT (competition_id) DO UPDATE
+            SET name    = EXCLUDED.name,
+                country = EXCLUDED.country,
+                season  = EXCLUDED.season;
+            """,
             (league_id, league["name"], league.get("country", ""), season),
         )
 
