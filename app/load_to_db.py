@@ -371,3 +371,10 @@ def load_players_and_stats():
     cur.close()
     conn.close()
     print("Finished loading players + player match stats.")
+
+def main():
+    load_matches_and_teams()
+    load_players_and_stats()
+
+if __name__ == "__main__":
+    main()
