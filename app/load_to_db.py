@@ -9,7 +9,7 @@ from config import RAW_MATCHES_DIR, RAW_PLAYER_STATS_DIR
 # DB connection config
 DB_SETTINGS ={
     "host": "localhost",
-    "port": 5432,
+    "port": 5438,
     "dbname": "foota_warehouse",
     "user": "foota",
     "password": "foota",
