@@ -201,3 +201,39 @@ def load_matches_and_teams():
     cur.close()
     conn.close()
     print("Finished loading matches + team facts.")
+
+# Load Players + Player Facts
+def _parse_rating(value):
+    if value is None:
+        return None
+    try: 
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+def _parse_int(value):
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+def load_players_and_stats():
+    conn = get_connection()
+    cur = conn.cursor()
+    
+    # Start fresh for each run
+    cur.execute("TRUNCATE fact_player_match_stats RESTART IDENTITY CASCADE;")
+    cur.execute("TRUNCATE dim_players CASCADE;")
+    conn.commit()
+
+    stat_files = sorted(glob(os.path.join(RAW_PLAYER_STATS_DIR, "*.json")))
+    print(f"Found {len(stat_files)} player-stat files in {RAW_PLAYER_STATS_DIR}")
+    
+
+    for idx, path in enumerate(stat_files, start=1):
+        fixture_id = int(os.path.splitext(os.path.basename(path))[0])
+
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
