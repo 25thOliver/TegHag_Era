@@ -237,3 +237,29 @@ def load_players_and_stats():
 
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
+
+        # data is a list of team blocks
+        for team_block in data:
+            team = team_block["team"]
+            team_id = team["id"]
+
+            for entry in team_block.get("players", []):
+                player = entry["player"]
+                stats_list = entry.get("statistics", [])
+                if not stats_list:
+                    continue
+
+                s = stats_list[0]
+
+                games = s.get("games", {}) or {}
+                shots = s.get("shots", {}) or {}
+                goals = s.get("goals", {}) or {}
+                passes = s.get("passes", {}) or {}
+                tackles = s.get("tackles", {}) or {}
+                duels = s.get("duels", {}) or {}
+                dribbles = s.get("dribbles", {}) or {}
+                fouls = s.get("fouls", {}) or {}
+                cards = s.get("cards", {}) or {}
+                penalty = s.get("penalty", {}) or {}
+
+                player_id = player["id"]
