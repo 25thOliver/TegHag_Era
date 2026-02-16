@@ -263,3 +263,15 @@ def load_players_and_stats():
                 penalty = s.get("penalty", {}) or {}
 
                 player_id = player["id"]
+
+                # dim_players
+                cur.execute(
+                    """
+                    INSERT INTO dim_players (player_id, name, photo_url)
+                    VALUES (%s, %s, %s)
+                    ON CONFLICT (player_id) DO UPDATE
+                      SET name = EXCLUDED.name,
+                          photo_url = EXCLUDED.photo_url;
+                    """,
+                    (player_id, player["name"], player.get("photo")),
+                )
