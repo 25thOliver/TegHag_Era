@@ -52,3 +52,16 @@ def load_matches_and_teams():
 
         home = teams["home"]
         away = teams["away"]
+
+        # dim_competitions
+        cur.execute(
+            """
+            INSERT INTO dim_competitions (competition_id, name, country, season)
+            VALUES (%s, %s, %s, %s)
+            ON CONLICT (competition_id) DO UPDATE
+              SET name = EXCLUDED.name,
+                  country = EXCLUDED.country,
+                  season = EXCLUDED.season
+            """
+            (league_id, league["name"], league.get("country", ""), season)
+        )
