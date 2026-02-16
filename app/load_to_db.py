@@ -126,3 +126,36 @@ def load_matches_and_teams():
         ht = score.get("halftime", {}) or {}
         home_goals = goals.get("home")
         away_goals = goals.get("away")
+
+        # home row
+        cur.execute(
+            """
+            INSERT INTO fact_team_match_stats (
+                fixture_id,
+                team_id,
+                is_home,
+                goals_for,
+                goals_against,
+                goals_halftime_for,
+                goals_halftime_against,
+                winner
+            )
+            VALUES (%s, %s, TRUE, %s, %s, %s, %s, %s)
+            ON CONFLICT (fixture_id, team_id) DO UPDATE
+              SET is_home             = EXCLUDED.is_home,
+                  goals_for           = EXCLUDED.goals_for,
+                  goals_against       = EXCLUDED.goals_against,
+                  goals_halftime_for  = EXCLUDED.goals_halftime_for,
+                  goals_halftime_against = EXCLUDED.goals_halftime_against,
+                  winner              = EXCLUDED.winner;
+            """,
+            (
+                fixture_id,
+                home["id"],
+                home_goals,
+                away_goals,
+                ht.get("home"),
+                ht.get("away"),
+                home.get("winner"),
+            ),
+        )
