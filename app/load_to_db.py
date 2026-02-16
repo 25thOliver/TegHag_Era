@@ -63,5 +63,61 @@ def load_matches_and_teams():
                   country = EXCLUDED.country,
                   season = EXCLUDED.season
             """
-            (league_id, league["name"], league.get("country", ""), season)
+            (league_id, league["name"], league.get("country", ""), season),
+        )
+
+        # dim_matches
+        cur.execute(
+            """
+            INSERT INTO dim_matches (
+                fixture_id,
+                fixture_date,
+                venue_id,
+                venue_name,
+                venue_city,
+                league_id,
+                league_name,
+                season,
+                round_name,
+                referee,
+                status_short,
+                home_team_id,
+                away_team_id,
+                home_team_name,
+                away_team_name
+        )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            ON CONFLICT (fixture_id) DO UPDATE
+              SET fixture_date   = EXCLUDED.fixture_date,
+                  venue_id       = EXCLUDED.venue_id,
+                  venue_name     = EXCLUDED.venue_name,
+                  venue_city     = EXCLUDED.venue_city,
+                  league_id      = EXCLUDED.league_id,
+                  league_name    = EXCLUDED.league_name,
+                  season         = EXCLUDED.season,
+                  round_name     = EXCLUDED.round_name,
+                  referee        = EXCLUDED.referee,
+                  status_short   = EXCLUDED.status_short,
+                  home_team_id   = EXCLUDED.home_team_id,
+                  away_team_id   = EXCLUDED.away_team_id,
+                  home_team_name = EXCLUDED.home_team_name,
+                  away_team_name = EXCLUDED.away_team_name;
+            """,
+            (
+                fixture_id,
+                fixture_date,
+                venue.get("id"),
+                venue.get("name"),
+                venue.get("city"),
+                league_id,
+                league["name"],
+                season,
+                league.get("round"),
+                fixture.get("referee"),
+                status.get("short"),
+                home["id"],
+                away["id"],
+                home["name"],
+                away["name"],
+            ),
         )
