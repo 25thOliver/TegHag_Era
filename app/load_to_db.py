@@ -275,3 +275,99 @@ def load_players_and_stats():
                     """,
                     (player_id, player["name"], player.get("photo")),
                 )
+
+                # fact_player_match_stats
+                cur.execute(
+                    """
+                     INSERT INTO fact_player_match_stats (
+                        fixture_id,
+                        player_id,
+                        team_id,
+                        minutes,
+                        shirt_number,
+                        position,
+                        rating,
+                        captain,
+                        substitute,
+                        goals,
+                        assists,
+                        conceded,
+                        saves,
+                        shots_total,
+                        shots_on,
+                        passes_total,
+                        passes_key,
+                        passes_accuracy_pct,
+                        tackles_total,
+                        blocks,
+                        interceptions,
+                        duels_total,
+                        duels_won,
+                        dribbles_attempts,
+                        dribbles_success,
+                        fouls_drawn,
+                        fouls_committed,
+                        cards_yellow,
+                        cards_red,
+                        penalty_scored,
+                        penalty_missed,
+                        penalty_saved
+                    )
+                    VALUES (
+                        %s,%s,%s,
+                        %s,%s,%s,%s,%s,%s,
+                        %s,%s,%s,%s,
+                        %s,%s,
+                        %s,%s,%s,
+                        %s,%s,%s,
+                        %s,%s,
+                        %s,%s,
+                        %s,%s,
+                        %s,%s,
+                        %s,%s,%s
+                    );
+                    """,
+                    (
+                        fixture_id,
+                        player_id,
+                        team_id,
+                        games.get("minutes"),
+                        games.get("number"),
+                        games.get("position"),
+                        _parse_rating(games.get("rating")),
+                        games.get("captain"),
+                        games.get("substitute"),
+                        goals.get("total"),
+                        goals.get("assists"),
+                        goals.get("conceded"),
+                        goals.get("saves"),
+                        shots.get("total"),
+                        shots.get("on"),
+                        passes.get("total"),
+                        passes.get("key"),
+                        _parse_int(passes.get("accuracy")),
+                        tackles.get("total"),
+                        tackles.get("blocks"),
+                        tackles.get("interceptions"),
+                        duels.get("total"),
+                        duels.get("won"),
+                        dribbles.get("attempts"),
+                        dribbles.get("success"),
+                        fouls.get("drawn"),
+                        fouls.get("committed"),
+                        cards.get("yellow"),
+                        cards.get("red"),
+                        penalty.get("scored"),
+                        penalty.get("missed"),
+                        penalty.get("saved"),
+                    ),
+                )
+
+        if idx % 10 == 0:
+            conn.commit()
+            print(f"Loaded player stats for {idx} fixtures...")
+
+    conn.commit()
+    cur.close()
+    conn.close()
+    print("Finished loading players + player match stats.")
