@@ -192,3 +192,12 @@ def load_matches_and_teams():
                 away.get("winner"),
             ),
         )
+
+        if idx % 20 == 0:
+            conn.commit()
+            print(f"Loaded {idx} matches...")
+
+    conn.commit()
+    cur.close()
+    conn.close()
+    print("Finished loading matches + team facts.")
