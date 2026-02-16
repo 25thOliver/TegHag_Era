@@ -121,3 +121,8 @@ def load_matches_and_teams():
                 away["name"],
             ),
         )
+
+        # fact_team_match_stats (home + away)
+        ht = score.get("halftime", {}) or {}
+        home_goals = goals.get("home")
+        away_goals = goals.get("away")
